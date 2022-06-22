@@ -1,4 +1,4 @@
-# Exchange Rates API
+# Exchange Service API
 
 Exchange API is a Restful API providing exchange rates and conversions for many currencies.
 
