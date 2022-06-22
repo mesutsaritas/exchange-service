@@ -1,0 +1,15 @@
+# For Java 14, try this
+FROM adoptopenjdk/openjdk11:jre-11.0.6_10-alpine
+
+
+# Refer to Maven build -> finalName
+ARG JAR_FILE=target/*.jar
+
+# cd /opt/app
+WORKDIR /opt/app
+
+# cp target/exchange-rates-0.0.1.jar /opt/app/app.jar
+COPY ${JAR_FILE} app.jar
+
+# java -jar /opt/app/app.jar
+ENTRYPOINT ["java","-jar","app.jar"]

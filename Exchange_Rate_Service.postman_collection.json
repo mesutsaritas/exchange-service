@@ -1,0 +1,95 @@
+
+
+{
+	"info": {
+		"_postman_id": "a0301c7f-4932-4b17-b9c0-61cdf88fdcb7",
+		"name": "Exchange Rate Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:8080/exchange/rate",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"source\":\"USD\",\n    \"target\":\"TRY\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/exchange/rate",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"exchange",
+						"rate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/exchange/conversion",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"source\":\"USD\",\n    \"target\":\"TRY\",\n    \"amount\":10\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/exchange/conversion",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"exchange",
+						"conversion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/exchange/list",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"transactionId\":1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/exchange/list",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"exchange",
+						"list"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
