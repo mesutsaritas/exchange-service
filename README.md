@@ -20,8 +20,8 @@ Exchange Rates API is a Spring Boot project written in Java 11 and it uses follo
 
 The required docker codes to run are listed below;
 
-	 docker build -t exchange-rate . 
-     docker run -d -p 8080:8080 -t exchange-rate
+	 docker build -t exchange-service . 
+     docker run -d -p 8080:8080 -t exchange-service
 
 
 ## 3. Documentation
