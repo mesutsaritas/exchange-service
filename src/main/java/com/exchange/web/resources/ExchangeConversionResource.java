@@ -12,16 +12,11 @@ import java.math.BigDecimal;
 
 /**
  * @author msaritas
- *
  */
 @Setter
 @Getter
 public class ExchangeConversionResource implements Serializable {
 
-
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     @DecimalMin(value = "0.0", inclusive = false)

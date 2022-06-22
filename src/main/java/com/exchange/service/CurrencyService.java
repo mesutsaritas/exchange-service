@@ -37,9 +37,5 @@ public class CurrencyService {
             throw new ServiceUnavailableException();
         }
         return fixerResponseResource.getQuotes().entrySet().stream().findFirst().get().getValue();
-
-
     }
-
-
 }

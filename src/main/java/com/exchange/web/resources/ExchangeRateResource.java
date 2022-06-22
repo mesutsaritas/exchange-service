@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 
 /**
  * @author msaritas
- *
  */
 @Builder
 @AllArgsConstructor

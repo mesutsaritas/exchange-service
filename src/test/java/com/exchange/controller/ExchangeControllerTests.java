@@ -1,14 +1,15 @@
 package com.exchange.controller;
 
+import com.exchange.dataloader.ExchangeDataLoader;
 import com.exchange.model.Transaction;
 import com.exchange.service.ExchangeService;
-import com.exchange.util.TestUtil;
 import com.exchange.web.controller.ExchangeController;
 import com.exchange.web.exception.EmptyParamatersException;
 import com.exchange.web.exception.ServiceUnavailableException;
 import com.exchange.web.exception.UnsupportedCurrencyTypeException;
-import com.exchange.web.resources.*;
-import org.jeasy.random.EasyRandom;
+import com.exchange.web.resources.ConversionResponseResource;
+import com.exchange.web.resources.ExchangeRateResource;
+import com.exchange.web.resources.TransactionResource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,6 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -42,20 +42,18 @@ class ExchangeControllerTests {
 
     InOrder inOrder;
 
-    private EasyRandom easyRandom;
 
     @BeforeEach
     void setUp() {
         inOrder = Mockito.inOrder(exchangeService);
-        easyRandom = new EasyRandom(TestUtil.getEasyRandomParameters());
     }
 
     @DisplayName("Test Rate API Scenario")
     @Test
     void rate() throws ServiceUnavailableException, UnsupportedCurrencyTypeException {
 
-        final var exchangeRateRequest = easyRandom.nextObject(ExchangeRateResource.class);
-        final var exchangeRateResponse = easyRandom.nextObject(ExchangeRateResource.class);
+        final var exchangeRateRequest = ExchangeDataLoader.getExchangeRateResource();
+        final var exchangeRateResponse = ExchangeDataLoader.getExchangeRateResource();
 
         //given
         when(exchangeService.exchangeRate(exchangeRateRequest)).thenReturn(exchangeRateResponse);
@@ -63,13 +61,13 @@ class ExchangeControllerTests {
         //when
         final ResponseEntity<ExchangeRateResource> exchangeRateResourceApi = exchangeController.rate(exchangeRateRequest);
 
-
         //then
+        inOrder.verify(exchangeService).exchangeRate(exchangeRateRequest);
+        inOrder.verifyNoMoreInteractions();
+
         assertNotNull(exchangeRateResourceApi.getBody());
         assertThat(exchangeRateResourceApi.getBody().getExchangeRate()).isNotNull();
 
-        inOrder.verify(exchangeService).exchangeRate(exchangeRateRequest);
-        inOrder.verifyNoMoreInteractions();
 
     }
 
@@ -77,8 +75,8 @@ class ExchangeControllerTests {
     @Test
     void conversion() throws ServiceUnavailableException, UnsupportedCurrencyTypeException {
 
-        final var exchangeConversionRequest = easyRandom.nextObject(ExchangeConversionResource.class);
-        final var exchangeConversionResponse = easyRandom.nextObject(ConversionResponseResource.class);
+        final var exchangeConversionRequest = ExchangeDataLoader.getExchangeConversionResource();
+        final var exchangeConversionResponse = ExchangeDataLoader.getConversionResponseResource();
 
         //given
         when(exchangeService.exchangeConversion(exchangeConversionRequest)).thenReturn(exchangeConversionResponse);
@@ -87,32 +85,29 @@ class ExchangeControllerTests {
         final ResponseEntity<ConversionResponseResource> exchangeRateResourceApi = exchangeController.conversion(exchangeConversionRequest);
 
         // then
-        assertNotNull(exchangeRateResourceApi.getBody());
-        assertThat(exchangeRateResourceApi.getBody().getAmount()).isNotNull();
-
         inOrder.verify(exchangeService).exchangeConversion(exchangeConversionRequest);
         inOrder.verifyNoMoreInteractions();
-
+        assertNotNull(exchangeRateResourceApi.getBody());
+        assertThat(exchangeRateResourceApi.getBody().getAmount()).isNotNull();
     }
 
-
+    @DisplayName("Test List API Scenario")
     @Test
-    void list() throws ServiceUnavailableException, EmptyParamatersException {
+    void list() throws EmptyParamatersException {
 
-        final var listRequest = easyRandom.nextObject(ExchangeListResource.class);
-        List<Transaction> listResponse = easyRandom.objects(Transaction.class, 5).collect(Collectors.toList());
+        final var exchangeListResource = ExchangeDataLoader.getExchangeListResource();
+        List<Transaction> listResponse = ExchangeDataLoader.getTransaction();
 
         //given
-        when(exchangeService.exchangeList(listRequest)).thenReturn(listResponse);
+        when(exchangeService.exchangeList(exchangeListResource)).thenReturn(listResponse);
 
-        // when
-        final ResponseEntity<CollectionModel<TransactionResource>> exchangeRateResourceApi = exchangeController.list(listRequest);
+        //when
+        final ResponseEntity<CollectionModel<TransactionResource>> exchangeRateResourceApi = exchangeController.list(exchangeListResource);
 
-        // then
-        assertNotNull(exchangeRateResourceApi.getBody());
-
-        inOrder.verify(exchangeService).exchangeList(listRequest);
+        //then
+        inOrder.verify(exchangeService).exchangeList(exchangeListResource);
         inOrder.verifyNoMoreInteractions();
+        assertNotNull(exchangeRateResourceApi.getBody());
 
     }
 

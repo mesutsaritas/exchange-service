@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+
 /**
  * @author msaritas
  */
@@ -18,25 +19,12 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
 
 
-    /**
-     * 
-     * @return
-     */
     public Transaction save(Transaction transaction) {
-        Transaction transactionFromDB = transactionRepository.save(transaction);
-        return transactionFromDB;
+        return transactionRepository.save(transaction);
     }
 
-
-    /**
-     * 
-     * @param transactionId
-     * @param conversionDate
-     * @return
-     */
     public List<Transaction> findAllByConversionDate(Long transactionId, Date conversionDate) {
         return transactionRepository.findByIdOrCreatedDate(transactionId, conversionDate);
     }
-
 
 }

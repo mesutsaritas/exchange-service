@@ -7,6 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+/**
+ * @author msaritas
+ */
 @EnableFeignClients
 @OpenAPIDefinition(info = @Info(title = "Exchange Service API" , version = "1.0"))
 @EnableJpaAuditing

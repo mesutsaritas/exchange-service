@@ -12,30 +12,29 @@ import java.util.Map;
 
 /**
  * @author msaritas
- *
  */
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
-public class CurrenyServiceResponseResource implements Serializable{
+public class CurrenyServiceResponseResource implements Serializable {
 
-  
+
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("success")
     private Boolean success;
-    
+
     @JsonProperty("timestamp")
     private Long timestamp;
-    
+
     @JsonProperty("base")
     private String base;
-    
+
     @JsonProperty("error")
     private ServiceResponseErrorResource error;
-    
+
     @JsonProperty("quotes")
     private Map<String, BigDecimal> quotes;
-    
+
 }

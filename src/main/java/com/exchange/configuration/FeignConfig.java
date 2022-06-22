@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @author msaritas
- *
  */
 @Configuration
 public class FeignConfig {

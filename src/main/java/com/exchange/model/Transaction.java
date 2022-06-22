@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 
 /**
  * @author msaritas
- *
  */
 @SuperBuilder
 @NoArgsConstructor

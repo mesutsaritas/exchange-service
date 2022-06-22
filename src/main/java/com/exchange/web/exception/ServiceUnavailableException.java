@@ -5,7 +5,6 @@ import com.exchange.web.resources.ErrorResource;
 
 /**
  * @author msaritas
- *
  */
 public class ServiceUnavailableException extends Exception {
 

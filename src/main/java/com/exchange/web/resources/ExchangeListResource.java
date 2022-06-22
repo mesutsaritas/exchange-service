@@ -8,7 +8,6 @@ import java.util.Date;
 
 /**
  * @author msaritas
- *
  */
 @Setter
 @Getter

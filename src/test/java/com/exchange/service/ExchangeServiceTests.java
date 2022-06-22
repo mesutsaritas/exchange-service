@@ -1,5 +1,6 @@
 package com.exchange.service;
 
+import com.exchange.dataloader.ExchangeDataLoader;
 import com.exchange.model.Transaction;
 import com.exchange.util.TestUtil;
 import com.exchange.web.exception.EmptyParamatersException;
@@ -21,9 +22,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -57,50 +58,104 @@ class ExchangeServiceTests {
     @DisplayName("Test Exchange Rate Service Scenario")
     @Test
     void exchangeRate() throws ServiceUnavailableException, UnsupportedCurrencyTypeException {
-        final var exchangeRateResource = easyRandom.nextObject(ExchangeRateResource.class);
+        final var exchangeRateResource = ExchangeDataLoader.getExchangeRateResource();
 
         // given
         when(currencyService.callCurrencyLayerLiveService(any(), any())).thenReturn(BigDecimal.TEN);
 
         //when
         final var response = exchangeService.exchangeRate(exchangeRateResource);
-        // then
+
+        //then
+        inOrder.verify(currencyService).callCurrencyLayerLiveService(any(),any());
+        inOrder.verifyNoMoreInteractions();
+
         assertThat(response.getExchangeRate()).isNotNull();
+
+    }
+
+
+    @DisplayName("Test Exchange Rate Service UnsupportedCurrencyTypeException Scenario")
+    @Test
+    void exchangeRate_throwsException_when_UnsupportedCurrencyTypeException() {
+        final var exchangeRateResource = easyRandom.nextObject(ExchangeRateResource.class);
+
+        //when
+        Throwable throwable = catchThrowable(() -> exchangeService.exchangeRate(exchangeRateResource));
+
+        //then
+        assertThat(throwable).isNotNull().isExactlyInstanceOf(UnsupportedCurrencyTypeException.class);
 
     }
 
     @DisplayName("Test Exchange Conversion Service Scenario")
     @Test
-    void exchangeConversion() throws ServiceUnavailableException, EmptyParamatersException, UnsupportedCurrencyTypeException {
-        final var transaction = easyRandom.nextObject(Transaction.class);
-        final var exchangeConversionResource = easyRandom.nextObject(ExchangeConversionResource.class);
+    void exchangeConversion() throws ServiceUnavailableException, UnsupportedCurrencyTypeException {
+        final var transaction = ExchangeDataLoader.getTransaction().get(0);
+        final var exchangeConversionResource = ExchangeDataLoader.getExchangeConversionResource();
 
-        // when
+        //given
         when(currencyService.callCurrencyLayerLiveService(any(), any())).thenReturn(BigDecimal.TEN);
 
         when(transactionService.save(any())).thenReturn(transaction);
 
+        //when
         final var response = exchangeService.exchangeConversion(exchangeConversionResource);
+
+        //then
+        inOrder.verify(currencyService).callCurrencyLayerLiveService(any(),any());
+        inOrder.verify(transactionService).save(any());
+        inOrder.verifyNoMoreInteractions();
 
         assertThat(response.getAmount()).isNotNull();
 
     }
 
+    @DisplayName("Test Exchange Conversion Service UnsupportedCurrencyTypeException Scenario")
+    @Test
+    void exchangeConversion_throwsException_when_UnsupportedCurrencyTypeException() {
+        final var exchangeConversionResource = easyRandom.nextObject(ExchangeConversionResource.class);
+
+        //when
+        Throwable throwable = catchThrowable(() -> exchangeService.exchangeConversion(exchangeConversionResource));
+
+        //then
+        assertThat(throwable).isNotNull().isExactlyInstanceOf(UnsupportedCurrencyTypeException.class);
+    }
+
+
     @DisplayName("Test Exchange List Service Scenario")
     @Test
-    void exchangeList() throws ServiceUnavailableException, EmptyParamatersException {
-        List<Transaction> transactions =
-                easyRandom.objects(Transaction.class, 5).collect(Collectors.toList());
-        final var exchangeListResource = easyRandom.nextObject(ExchangeListResource.class);
+    void exchangeList() throws EmptyParamatersException {
+        List<Transaction> transactions = ExchangeDataLoader.getTransaction();
+        final var exchangeListResource = ExchangeDataLoader.getExchangeListResource();
 
-        // given
+        //given
         when(transactionService.findAllByConversionDate(any(), any())).thenReturn(transactions);
 
-        // when
+        //when
         final var response = exchangeService.exchangeList(exchangeListResource);
 
-        // then
+        //then
+        inOrder.verify(transactionService).findAllByConversionDate(any(),any());
+        inOrder.verifyNoMoreInteractions();
+
         assertThat(response.get(0).getAmount()).isNotNull();
+    }
+
+
+    @DisplayName("Test Exchange List Service EmptyParamatersException Scenario")
+    @Test
+    void exchangeList_throwsException_when_EmptyParamatersException() {
+        final var exchangeListResource = easyRandom.nextObject(ExchangeListResource.class);
+        exchangeListResource.setTransactionId(null);
+        exchangeListResource.setConversionDate(null);
+
+        //when
+        Throwable throwable = catchThrowable(() -> exchangeService.exchangeList(exchangeListResource));
+
+        //then
+        assertThat(throwable).isNotNull().isExactlyInstanceOf(EmptyParamatersException.class);
     }
 
 

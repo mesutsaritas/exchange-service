@@ -14,7 +14,6 @@ import java.util.Date;
 import static javax.persistence.TemporalType.TIMESTAMP;
 /**
  * @author msaritas
- *
  */
 @SuperBuilder
 @Setter

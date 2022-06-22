@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 
 /**
  * @author msaritas
- *
  */
 @NoArgsConstructor
 @AllArgsConstructor

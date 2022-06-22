@@ -14,11 +14,9 @@ public class TransactionResourceAssembler extends RepresentationModelAssemblerSu
         super(ExchangeController.class, TransactionResource.class);
     }
 
-
     @Override
     public TransactionResource toModel(Transaction entity) {
-        final var transactionResource = TransactionResource.builder().amount(entity.getAmount()).calculatedAmount(entity.getCalculatedAmount()).transactionDate(entity.getCreatedDate()).source(entity.getSource()).target(entity.getTarget()).build();
-        return transactionResource;
+        return TransactionResource.builder().amount(entity.getAmount()).calculatedAmount(entity.getCalculatedAmount()).transactionDate(entity.getCreatedDate()).source(entity.getSource()).target(entity.getTarget()).build();
     }
 
 }
