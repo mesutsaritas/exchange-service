@@ -18,9 +18,9 @@ public class ExchangeDataLoader {
 
     public static ExchangeRateResource getExchangeRateResource() {
         ExchangeRateResource exchangeRateResource = new ExchangeRateResource();
-        exchangeRateResource.setExchangeRate(BigDecimal.ZERO);
+        exchangeRateResource.setExchangeRates(BigDecimal.ZERO);
         exchangeRateResource.setSource("TRY");
-        exchangeRateResource.setTarget("USD");
+        exchangeRateResource.setTargets("USD");
         return exchangeRateResource;
 
     }

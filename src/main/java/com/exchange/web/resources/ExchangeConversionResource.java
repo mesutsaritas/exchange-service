@@ -9,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author msaritas
@@ -17,17 +18,16 @@ import java.math.BigDecimal;
 @Getter
 public class ExchangeConversionResource implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    @DecimalMin(value = "0.0", inclusive = false)
-    @Digits(integer = 5, fraction = 2)
-    @NotNull(message = "Amount is mandatory")
-    private BigDecimal amount;
+  @DecimalMin(value = "0.0", inclusive = false)
+  @Digits(integer = 5, fraction = 2)
+  @NotNull(message = "Amount is mandatory")
+  private BigDecimal amount;
 
-    @NotBlank(message = "Source is mandatory")
-    private String source;
+  @NotBlank(message = "Source is mandatory")
+  private String source;
 
-    @NotBlank(message = "Target is mandatory")
-    private String target;
-
+  @NotBlank(message = "Target is mandatory")
+  private List<String> targets;
 }

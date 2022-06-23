@@ -66,7 +66,7 @@ class ExchangeControllerTests {
         inOrder.verifyNoMoreInteractions();
 
         assertNotNull(exchangeRateResourceApi.getBody());
-        assertThat(exchangeRateResourceApi.getBody().getExchangeRate()).isNotNull();
+        assertThat(exchangeRateResourceApi.getBody().getExchangeRates()).isNotNull();
 
 
     }

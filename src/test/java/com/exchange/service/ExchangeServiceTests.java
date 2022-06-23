@@ -70,7 +70,7 @@ class ExchangeServiceTests {
         inOrder.verify(currencyService).callCurrencyLayerLiveService(any(),any());
         inOrder.verifyNoMoreInteractions();
 
-        assertThat(response.getExchangeRate()).isNotNull();
+        assertThat(response.getExchangeRates()).isNotNull();
 
     }
 

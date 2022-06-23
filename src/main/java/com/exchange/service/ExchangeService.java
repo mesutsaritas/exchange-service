@@ -16,7 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author msaritas
@@ -26,50 +28,74 @@ import java.util.List;
 @Service
 public class ExchangeService {
 
+  private final TransactionService transactionService;
 
-    private final TransactionService transactionService;
+  private final CurrencyService currencyService;
 
-    private final CurrencyService currencyService;
+  public ExchangeRateResource exchangeRate(ExchangeRateResource exchangeRateResource)
+      throws ServiceUnavailableException, UnsupportedCurrencyTypeException {
+    List<String> validationCheckList = new ArrayList<>();
+    validationCheckList.addAll(exchangeRateResource.getTargets());
+    validationCheckList.add(exchangeRateResource.getSource());
+    checkCurrencyType(validationCheckList);
+    log.info(
+        "[ExchangeService][exchangeRate][Currency live service is called with parameters source:{} and target:{} ]",
+        exchangeRateResource.getSource(),
+        exchangeRateResource.getTargets());
+    Map<String, BigDecimal> pairExchangeList =
+        currencyService.callCurrencyLayerLiveService(
+            exchangeRateResource.getSource(), exchangeRateResource.getTargets());
+    return ExchangeRateResource.builder().exchangeRates(pairExchangeList).build();
+  }
 
+  public ConversionResponseResource exchangeConversion(ExchangeConversionResource exchangeConversionResource)
+      throws ServiceUnavailableException, UnsupportedCurrencyTypeException {
+    String source = exchangeConversionResource.getSource();
+    List<String> target = exchangeConversionResource.getTargets();
+    BigDecimal amount = exchangeConversionResource.getAmount();
 
-    public ExchangeRateResource exchangeRate(ExchangeRateResource exchangeRateResource) throws ServiceUnavailableException, UnsupportedCurrencyTypeException {
-        checkCurrencyType(List.of(exchangeRateResource.getSource(), exchangeRateResource.getTarget()));
-        log.info("[ExchangeService][exchangeRate][Currency live service is called with parameters source:{} and target:{} ]", exchangeRateResource.getSource(), exchangeRateResource.getTarget());
-        BigDecimal exchangeRate = currencyService.callCurrencyLayerLiveService(exchangeRateResource.getSource(), exchangeRateResource.getTarget());
-        return ExchangeRateResource.builder().exchangeRate(exchangeRate).build();
+    checkCurrencyType(List.of(source, target));
+    BigDecimal exchangeRate = currencyService.callCurrencyLayerLiveService(source, target);
+    BigDecimal calculatedAmount = exchangeRate.multiply(amount);
+    Transaction transaction =
+        Transaction.builder()
+            .calculatedAmount(calculatedAmount)
+            .source(source)
+            .target(target)
+            .amount(amount)
+            .exhangeRate(exchangeRate)
+            .build();
+    Transaction transactionFromDB = transactionService.save(transaction);
+    log.info(
+        "[ExchangeService][exchangeConversion][Currency conversion service is called with parameters source:{} and target:{} and amount:{} ]",
+        source,
+        target,
+        amount);
+    return ConversionResponseResource.builder()
+        .amount(calculatedAmount)
+        .transactionId(transactionFromDB.getId())
+        .build();
+  }
 
+  @Transactional(readOnly = true)
+  public List<Transaction> exchangeList(ExchangeListResource exchangeListResource)
+      throws EmptyParamatersException {
+    if (ObjectUtils.isEmpty(exchangeListResource.getTransactionId())
+        && ObjectUtils.isEmpty(exchangeListResource.getConversionDate())) {
+      throw new EmptyParamatersException();
     }
+    log.info(
+        "[ExchangeService][exchangeList][Transaction service queried with these parameters transactionId:{} and conversionDate:{}]",
+        exchangeListResource.getTransactionId(),
+        exchangeListResource.getConversionDate());
+    return transactionService.findAllByConversionDate(
+        exchangeListResource.getTransactionId(), exchangeListResource.getConversionDate());
+  }
 
-    public ConversionResponseResource exchangeConversion(ExchangeConversionResource exchangeConversionResource) throws ServiceUnavailableException, UnsupportedCurrencyTypeException {
-        String source = exchangeConversionResource.getSource();
-        String target = exchangeConversionResource.getTarget();
-        BigDecimal amount = exchangeConversionResource.getAmount();
-
-        checkCurrencyType(List.of(source, target));
-        BigDecimal exchangeRate = currencyService.callCurrencyLayerLiveService(source, target);
-        BigDecimal calculatedAmount = exchangeRate.multiply(amount);
-        Transaction transaction = Transaction.builder().calculatedAmount(calculatedAmount).source(source).target(target).amount(amount).exhangeRate(exchangeRate).build();
-        Transaction transactionFromDB = transactionService.save(transaction);
-        log.info("[ExchangeService][exchangeConversion][Currency conversion service is called with parameters source:{} and target:{} and amount:{} ]", source, target, amount);
-        return ConversionResponseResource.builder().amount(calculatedAmount).transactionId(transactionFromDB.getId()).build();
+  private static void checkCurrencyType(List<String> currencies)
+      throws UnsupportedCurrencyTypeException {
+    for (String currency : currencies) {
+      CurrencyType.getByValue(currency);
     }
-
-
-    @Transactional(readOnly = true)
-    public List<Transaction> exchangeList(ExchangeListResource exchangeListResource) throws EmptyParamatersException {
-        if (ObjectUtils.isEmpty(exchangeListResource.getTransactionId()) && ObjectUtils.isEmpty(exchangeListResource.getConversionDate())) {
-            throw new EmptyParamatersException();
-        }
-        log.info("[ExchangeService][exchangeList][Transaction service queried with these parameters transactionId:{} and conversionDate:{}]", exchangeListResource.getTransactionId(), exchangeListResource.getConversionDate());
-        return transactionService.findAllByConversionDate(exchangeListResource.getTransactionId(), exchangeListResource.getConversionDate());
-    }
-
-
-    private static void checkCurrencyType(List<String> currencies) throws UnsupportedCurrencyTypeException {
-        for (String currency : currencies) {
-            CurrencyType.getByValue(currency);
-        }
-    }
-
-
+  }
 }
