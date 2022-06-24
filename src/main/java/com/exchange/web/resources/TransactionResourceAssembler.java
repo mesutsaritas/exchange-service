@@ -22,7 +22,9 @@ public class TransactionResourceAssembler
   public TransactionResource toModel(Transaction entity) {
 
     if (!CollectionUtils.isEmpty(entity.getTransactionDetail())) {
-      entity.getTransactionDetail().stream().map(this::getTransactionDetail).collect(Collectors.toList());
+      entity.getTransactionDetail().stream().map(this::getTransactionDetail)
+          .collect(Collectors.toList());
+
     }
 
     var resource = TransactionResource.builder();
