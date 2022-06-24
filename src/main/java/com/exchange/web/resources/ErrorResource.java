@@ -1,9 +1,8 @@
 package com.exchange.web.resources;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-
 import java.io.Serializable;
+import lombok.Getter;
 
 /**
  * @author msaritas

@@ -6,7 +6,7 @@ package com.exchange.web.resources;
 public enum MessageType {
     ERROR("error"), SUCCESS("success"), WARNING("warning"), INFO("info");
 
-    private String type;
+    private final String type;
 
     MessageType(String type) {
         this.type = type;

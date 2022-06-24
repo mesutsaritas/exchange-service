@@ -1,23 +1,26 @@
 package com.exchange.model;
 
-import lombok.EqualsAndHashCode;
+import java.math.BigDecimal;
+import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import java.math.BigDecimal;
-
 /**
  * @author msaritas
  */
 @SuperBuilder
+@AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "TRANSACTION")
 @SequenceGenerator(name = "default_gen", sequenceName = "SEQ_TRANSACTION", allocationSize = 1)
@@ -25,24 +28,14 @@ import java.math.BigDecimal;
 @Setter
 public class Transaction extends AbstractEntity<Long> {
 
+  private static final long serialVersionUID = 1L;
 
-    private static final long serialVersionUID = 1L;
+  @Column(name = "SOURCE")
+  private String source;
 
-    @Column(name = "SOURCE")
-    private String source;
+  @Column(name = "AMOUNT")
+  private BigDecimal amount;
 
-    @Column(name = "TARGET")
-    private String target;
-
-    @Column(name = "EXCHANGE_RATE")
-    private BigDecimal exhangeRate;
-
-    @Column(name = "AMOUNT")
-    private BigDecimal amount;
-
-    @Column(name = "CALCULATED_AMOUNT")
-    private BigDecimal calculatedAmount;
-
-
-
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "transaction", cascade = CascadeType.ALL)
+  private Set<TransactionDetail> transactionDetail;
 }

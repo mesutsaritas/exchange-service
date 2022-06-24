@@ -1,12 +1,12 @@
 package com.exchange.web.resources;
 
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.hateoas.RepresentationModel;
-
-import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * @author msaritas
@@ -16,16 +16,12 @@ import java.util.Date;
 @Setter
 public class TransactionResource extends RepresentationModel<TransactionResource> {
 
-    private String source;
+  private String source;
 
-    private String target;
+  private BigDecimal amount;
 
-    private BigDecimal exhangeRate;
+  private Date transactionDate;
 
-    private BigDecimal amount;
-
-    private BigDecimal calculatedAmount;
-
-    private Date transactionDate;
+  private List<TransactionDetailResource> transactionDetails;
 
 }

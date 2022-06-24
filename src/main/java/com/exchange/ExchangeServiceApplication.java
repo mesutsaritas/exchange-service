@@ -10,14 +10,14 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 /**
  * @author msaritas
  */
+
+@OpenAPIDefinition(info = @Info(title = "Exchange Service API", version = "1.0"))
 @EnableFeignClients
-@OpenAPIDefinition(info = @Info(title = "Exchange Service API" , version = "1.0"))
 @EnableJpaAuditing
 @SpringBootApplication
 public class ExchangeServiceApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(ExchangeServiceApplication.class, args);
-    }
-
+  public static void main(String[] args) {
+    SpringApplication.run(ExchangeServiceApplication.class, args);
+  }
 }

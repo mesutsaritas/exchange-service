@@ -1,8 +1,13 @@
 package com.exchange.web.exception;
 
 import com.exchange.web.resources.ErrorResource;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import javax.validation.ConstraintViolationException;
+import javax.validation.constraints.NotNull;
 import org.apache.commons.lang.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import javax.validation.ConstraintViolationException;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
 /**
@@ -42,9 +41,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
 
-    @ExceptionHandler(value = EmptyParamatersException.class)
+    @ExceptionHandler(value = EmptyParametersException.class)
     public @ResponseBody
-    ResponseEntity<ErrorResource> emptyParamatersException(EmptyParamatersException e) {
+    ResponseEntity<ErrorResource> emptyParamatersException(EmptyParametersException e) {
         return new ResponseEntity<>(e.getErrorResource(), HttpStatus.BAD_REQUEST);
     }
 

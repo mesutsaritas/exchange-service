@@ -1,20 +1,1 @@
-package com.exchange.client;
-
-import com.exchange.configuration.FeignConfig;
-import com.exchange.web.resources.CurrenyServiceResponseResource;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-
-import java.net.URI;
-
-
-/**
- * @author msaritas
- */
-@FeignClient(name = "currency-client", configuration = FeignConfig.class)
-public interface CurrencyClient {
-
-    @GetMapping
-    CurrenyServiceResponseResource callCurrenyApi(URI baseUri);
-
-}
+package com.exchange.client;import com.exchange.web.resources.CurrencyServiceResponseResource;import org.springframework.cloud.openfeign.FeignClient;import org.springframework.web.bind.annotation.GetMapping;import org.springframework.web.bind.annotation.RequestParam;/** * @author msaritas */@FeignClient(name = "currency-client", url = "${currency-service.base-url}")public interface CurrencyClient {  @GetMapping  CurrencyServiceResponseResource callCurrencyApi(      @RequestParam(value = "access_key") String accessKey,      @RequestParam(value = "source") String source,      @RequestParam(value = "currencies") String currencies,      @RequestParam(value = "format") String format);}

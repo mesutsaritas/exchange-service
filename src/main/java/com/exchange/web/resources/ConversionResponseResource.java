@@ -1,9 +1,12 @@
 package com.exchange.web.resources;
 
-import lombok.*;
-
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * @author msaritas
@@ -15,9 +18,7 @@ import java.math.BigDecimal;
 @Setter
 public class ConversionResponseResource implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    private Long transactionId;
-    private BigDecimal amount;
-
-
+  private static final long serialVersionUID = 1L;
+  private Long transactionId;
+  private List<TransactionDetailResource> calculatedAmountList;
 }

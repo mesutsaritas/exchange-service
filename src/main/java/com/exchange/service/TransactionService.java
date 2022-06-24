@@ -2,11 +2,10 @@ package com.exchange.service;
 
 import com.exchange.model.Transaction;
 import com.exchange.repository.TransactionRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 /**
  * @author msaritas
@@ -15,16 +14,13 @@ import java.util.List;
 @Service
 public class TransactionService {
 
+  private final TransactionRepository transactionRepository;
 
-    private final TransactionRepository transactionRepository;
+  public Transaction save(Transaction transaction) {
+    return transactionRepository.save(transaction);
+  }
 
-
-    public Transaction save(Transaction transaction) {
-        return transactionRepository.save(transaction);
-    }
-
-    public List<Transaction> findAllByConversionDate(Long transactionId, Date conversionDate) {
-        return transactionRepository.findByIdOrCreatedDate(transactionId, conversionDate);
-    }
-
+  public List<Transaction> findAllByConversionDate(Long transactionId, Date conversionDate) {
+    return transactionRepository.findByIdOrCreatedDate(transactionId, conversionDate);
+  }
 }
