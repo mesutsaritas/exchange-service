@@ -76,7 +76,7 @@ public class ExchangeService {
     }
     log.info("Transaction service queried with these parameters transactionId:{} and conversionDate:{}",
         exchangeListResource.getTransactionId(), exchangeListResource.getConversionDate());
-    return transactionService.findAllByConversionDate(exchangeListResource.getTransactionId(), exchangeListResource.getConversionDate());
+    return transactionService.findByIdOrCreatedDate(exchangeListResource.getTransactionId(), exchangeListResource.getConversionDate());
   }
 
   private List<TransactionDetail> getTransactionDetails(String sourceCurrencies, List<String> targetCurrencies, BigDecimal amount,

@@ -20,7 +20,7 @@ public class TransactionService {
     return transactionRepository.save(transaction);
   }
 
-  public List<Transaction> findAllByConversionDate(Long transactionId, Date conversionDate) {
+  public List<Transaction> findByIdOrCreatedDate(Long transactionId, Date conversionDate) {
     return transactionRepository.findByIdOrCreatedDate(transactionId, conversionDate);
   }
 }

@@ -8,14 +8,16 @@ import static org.mockito.Mockito.when;
 import com.exchange.dataloader.ExchangeDataLoader;
 import com.exchange.model.Transaction;
 import com.exchange.util.TestUtil;
-import com.exchange.web.exception.EmptyParamatersException;
+import com.exchange.web.exception.EmptyParametersException;
 import com.exchange.web.exception.ServiceUnavailableException;
 import com.exchange.web.exception.UnsupportedCurrencyTypeException;
 import com.exchange.web.resources.ExchangeConversionResource;
 import com.exchange.web.resources.ExchangeListResource;
 import com.exchange.web.resources.ExchangeRateResource;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -47,11 +49,14 @@ class ExchangeServiceTests {
 
   private EasyRandom easyRandom;
 
+  private Map<String, BigDecimal> serviceResult;
 
   @BeforeEach
   void setUp() {
     inOrder = Mockito.inOrder(transactionService, currencyService);
     easyRandom = new EasyRandom(TestUtil.getEasyRandomParameters());
+    serviceResult = new HashMap<>();
+    serviceResult.put("TRYUSD", BigDecimal.TEN);
   }
 
   @DisplayName("Test Exchange Rate Service Scenario")
@@ -59,8 +64,11 @@ class ExchangeServiceTests {
   void exchangeRate() throws ServiceUnavailableException, UnsupportedCurrencyTypeException {
     final var exchangeRateResource = ExchangeDataLoader.getExchangeRateResource();
 
+    Map<String, BigDecimal> serviceResult = new HashMap<>();
+    serviceResult.put("TRY", BigDecimal.TEN);
+
     // given
-    when(currencyService.callCurrencyLayerLiveService(any(), any())).thenReturn(BigDecimal.TEN);
+    when(currencyService.callCurrencyLayerLiveService(any(), any())).thenReturn(serviceResult);
 
     //when
     final var response = exchangeService.exchangeRate(exchangeRateResource);
@@ -94,7 +102,7 @@ class ExchangeServiceTests {
     final var exchangeConversionResource = ExchangeDataLoader.getExchangeConversionResource();
 
     //given
-    when(currencyService.callCurrencyLayerLiveService(any(), any())).thenReturn(BigDecimal.TEN);
+    when(currencyService.callCurrencyLayerLiveService(any(), any())).thenReturn(serviceResult);
 
     when(transactionService.save(any())).thenReturn(transaction);
 
@@ -125,27 +133,27 @@ class ExchangeServiceTests {
 
   @DisplayName("Test Exchange List Service Scenario")
   @Test
-  void exchangeList() throws EmptyParamatersException {
+  void exchangeList() throws EmptyParametersException {
     List<Transaction> transactions = ExchangeDataLoader.getTransaction();
     final var exchangeListResource = ExchangeDataLoader.getExchangeListResource();
 
     //given
-    when(transactionService.findAllByConversionDate(any(), any())).thenReturn(transactions);
+    when(transactionService.findByIdOrCreatedDate(any(), any())).thenReturn(transactions);
 
     //when
     final var response = exchangeService.exchangeList(exchangeListResource);
 
     //then
-    inOrder.verify(transactionService).findAllByConversionDate(any(), any());
+    inOrder.verify(transactionService).findByIdOrCreatedDate(any(), any());
     inOrder.verifyNoMoreInteractions();
 
     assertThat(response.get(0).getAmount()).isNotNull();
   }
 
 
-  @DisplayName("Test Exchange List Service EmptyParamatersException Scenario")
+  @DisplayName("Test Exchange List Service EmptyParametersException Scenario")
   @Test
-  void exchangeList_throwsException_when_EmptyParamatersException() {
+  void exchangeList_throwsException_when_EmptyParametersException() {
     final var exchangeListResource = easyRandom.nextObject(ExchangeListResource.class);
     exchangeListResource.setTransactionId(null);
     exchangeListResource.setConversionDate(null);
@@ -154,7 +162,7 @@ class ExchangeServiceTests {
     Throwable throwable = catchThrowable(() -> exchangeService.exchangeList(exchangeListResource));
 
     //then
-    assertThat(throwable).isNotNull().isExactlyInstanceOf(EmptyParamatersException.class);
+    assertThat(throwable).isNotNull().isExactlyInstanceOf(EmptyParametersException.class);
   }
 
 

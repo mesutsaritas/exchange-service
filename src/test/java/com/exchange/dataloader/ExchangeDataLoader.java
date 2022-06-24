@@ -60,6 +60,7 @@ public class ExchangeDataLoader {
   public static List<Transaction> getTransaction() {
     Transaction transaction =
         Transaction.builder()
+            .id(1L)
             .source("USD")
             .amount(BigDecimal.ONE)
             .build();

@@ -3,7 +3,6 @@ package com.exchange.web.resources;
 import com.exchange.model.Transaction;
 import com.exchange.model.TransactionDetail;
 import com.exchange.web.controller.ExchangeController;
-import com.exchange.web.resources.TransactionResource.TransactionResourceBuilder;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
