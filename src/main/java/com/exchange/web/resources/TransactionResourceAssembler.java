@@ -12,22 +12,16 @@ import org.springframework.util.CollectionUtils;
  * @author msaritas
  */
 public class TransactionResourceAssembler
-    extends RepresentationModelAssemblerSupport<Transaction, TransactionResource> {
+    extends RepresentationModelAssemblerSupport<Transaction, TransactionResponseResource> {
 
   public TransactionResourceAssembler() {
-    super(ExchangeController.class, TransactionResource.class);
+    super(ExchangeController.class, TransactionResponseResource.class);
   }
 
   @Override
-  public TransactionResource toModel(Transaction entity) {
+  public TransactionResponseResource toModel(Transaction entity) {
 
-    if (!CollectionUtils.isEmpty(entity.getTransactionDetail())) {
-      entity.getTransactionDetail().stream().map(this::getTransactionDetail)
-          .collect(Collectors.toList());
-
-    }
-
-    var resource = TransactionResource.builder();
+    var resource = TransactionResponseResource.builder();
     resource.transactionDate(entity.getCreatedDate());
     resource.source(entity.getSource());
     resource.amount(entity.getAmount());

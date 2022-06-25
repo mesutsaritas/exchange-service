@@ -13,7 +13,7 @@ public class EmptyParametersException extends Exception {
 
   public EmptyParametersException() {
     this.errorResource =
-        new ErrorResource("At least one of the service parameters must be filled.");
+        new ErrorResource(400, "At least one of the service parameters must be filled.");
   }
 
   public ErrorResource getErrorResource() {

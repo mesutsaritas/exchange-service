@@ -22,7 +22,7 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Setter
 @Getter
-public class ExchangeRateResource implements Serializable {
+public class ExchangeRateResponseResource implements Serializable {
 
   private static final long serialVersionUID = 1L;
 

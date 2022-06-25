@@ -8,16 +8,16 @@ import com.exchange.web.resources.ErrorResource;
  */
 public class ServiceUnavailableException extends Exception {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    private final ErrorResource errorResource;
+  private final ErrorResource errorResource;
 
-    public ServiceUnavailableException() {
-        this.errorResource = new ErrorResource("Currency conversion is currently not available!");
-    }
+  public ServiceUnavailableException() {
+    this.errorResource = new ErrorResource(500, "Currency conversion is currently not available!");
+  }
 
-    public ErrorResource getErrorResource() {
-        return errorResource;
-    }
+  public ErrorResource getErrorResource() {
+    return errorResource;
+  }
 
 }

@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +18,7 @@ import lombok.experimental.SuperBuilder;
 /**
  * @author msaritas
  */
-@SuperBuilder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -28,7 +29,7 @@ import lombok.experimental.SuperBuilder;
     allocationSize = 1)
 @Getter
 @Setter
-public class TransactionDetail extends AbstractEntity<Long> {
+public class TransactionDetail extends Auditable<String, Long> {
 
   private static final long serialVersionUID = 1L;
 

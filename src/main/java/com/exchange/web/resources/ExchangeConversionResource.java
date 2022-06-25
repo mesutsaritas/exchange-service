@@ -9,11 +9,13 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
  * @author msaritas
  */
+@NoArgsConstructor
 @Setter
 @Getter
 public class ExchangeConversionResource implements Serializable {

@@ -5,19 +5,20 @@ import com.exchange.web.exception.EmptyParametersException;
 import com.exchange.web.exception.ServiceUnavailableException;
 import com.exchange.web.exception.UnsupportedCurrencyTypeException;
 import com.exchange.web.resources.ConversionResponseResource;
-import com.exchange.web.resources.ExchangeConversionResource;
-import com.exchange.web.resources.ExchangeListResource;
-import com.exchange.web.resources.ExchangeRateResource;
-import com.exchange.web.resources.TransactionResource;
+import com.exchange.web.resources.ExchangeRateResponseResource;
+import com.exchange.web.resources.TransactionResponseResource;
 import com.exchange.web.resources.TransactionResourceAssembler;
 import io.swagger.v3.oas.annotations.Operation;
-import javax.validation.Valid;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -33,27 +34,33 @@ public class ExchangeController {
   private TransactionResourceAssembler transactionResourceAssembler;
 
   @Operation(summary = "Currency Pair To Retrieve The Exchange Rate")
-  @PostMapping("/rate")
-  public ResponseEntity<ExchangeRateResource> rate(
-      @Valid @RequestBody ExchangeRateResource exchangeRateResource)
-      throws ServiceUnavailableException, UnsupportedCurrencyTypeException {
-    return ResponseEntity.ok().body(exchangeService.exchangeRate(exchangeRateResource));
+  @GetMapping("/rate")
+  public ResponseEntity<ExchangeRateResponseResource> rate(@RequestParam(value = "source") String source,
+      @RequestParam(value = "targets") List<String> targets)
+      throws ServiceUnavailableException,
+      UnsupportedCurrencyTypeException {
+    return ResponseEntity.ok().body(exchangeService.exchangeRate(source, targets));
   }
 
   @Operation(summary = "Conversion between currencies")
-  @PostMapping("/conversion")
+  @GetMapping("/conversion")
   public ResponseEntity<ConversionResponseResource> conversion(
-      @Valid @RequestBody ExchangeConversionResource exchangeConversionResource)
+      @RequestParam(value = "amount") BigDecimal amount,
+      @RequestParam(value = "source") String source,
+      @RequestParam(value = "targets") List<String> targets
+  )
       throws ServiceUnavailableException, UnsupportedCurrencyTypeException {
-    return ResponseEntity.ok().body(exchangeService.exchangeConversion(exchangeConversionResource));
+    return ResponseEntity.ok().body(exchangeService.exchangeConversion(amount, source, targets));
   }
 
   @Operation(summary = "Listing an Exchange By Transaction Id or Conversion Date")
-  @PostMapping("/list")
-  public ResponseEntity<CollectionModel<TransactionResource>> list(
-      @Valid @RequestBody ExchangeListResource exchangeListResource)
+  @GetMapping("/list")
+  public ResponseEntity<CollectionModel<TransactionResponseResource>> list(
+      @RequestParam(value = "transactionId", required = false) Long transactionId,
+      @RequestParam(value = "conversionDate", required = false) @DateTimeFormat(pattern = "MM/dd/yyyy") Date conversionDate)
       throws EmptyParametersException {
     transactionResourceAssembler = new TransactionResourceAssembler();
-    return ResponseEntity.ok().body(transactionResourceAssembler.toCollectionModel(exchangeService.exchangeList(exchangeListResource)));
+    return ResponseEntity.ok()
+        .body(transactionResourceAssembler.toCollectionModel(exchangeService.exchangeList(transactionId, conversionDate)));
   }
 }

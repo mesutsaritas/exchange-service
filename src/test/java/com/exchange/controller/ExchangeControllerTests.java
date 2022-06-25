@@ -2,6 +2,7 @@ package com.exchange.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.exchange.dataloader.ExchangeDataLoader;
@@ -12,8 +13,10 @@ import com.exchange.web.exception.EmptyParametersException;
 import com.exchange.web.exception.ServiceUnavailableException;
 import com.exchange.web.exception.UnsupportedCurrencyTypeException;
 import com.exchange.web.resources.ConversionResponseResource;
-import com.exchange.web.resources.ExchangeRateResource;
-import com.exchange.web.resources.TransactionResource;
+import com.exchange.web.resources.ExchangeRateResponseResource;
+import com.exchange.web.resources.TransactionResponseResource;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -50,23 +53,20 @@ class ExchangeControllerTests {
   @DisplayName("Test Rate API Scenario")
   @Test
   void rate() throws ServiceUnavailableException, UnsupportedCurrencyTypeException {
-
-    final var exchangeRateRequest = ExchangeDataLoader.getExchangeRateResource();
     final var exchangeRateResponse = ExchangeDataLoader.getExchangeRateResource();
 
     //given
-    when(exchangeService.exchangeRate(exchangeRateRequest)).thenReturn(exchangeRateResponse);
+    when(exchangeService.exchangeRate(any(), any())).thenReturn(exchangeRateResponse);
 
     //when
-    final ResponseEntity<ExchangeRateResource> exchangeRateResourceApi = exchangeController.rate(exchangeRateRequest);
+    final ResponseEntity<ExchangeRateResponseResource> exchangeRateResourceApi = exchangeController.rate("USD", List.of("TRY", "USD"));
 
     //then
-    inOrder.verify(exchangeService).exchangeRate(exchangeRateRequest);
+    inOrder.verify(exchangeService).exchangeRate(any(), any());
     inOrder.verifyNoMoreInteractions();
 
     assertNotNull(exchangeRateResourceApi.getBody());
     assertThat(exchangeRateResourceApi.getBody().getExchangeRates()).isNotNull();
-
 
   }
 
@@ -74,17 +74,17 @@ class ExchangeControllerTests {
   @Test
   void conversion() throws ServiceUnavailableException, UnsupportedCurrencyTypeException {
 
-    final var exchangeConversionRequest = ExchangeDataLoader.getExchangeConversionResource();
     final var exchangeConversionResponse = ExchangeDataLoader.getConversionResponseResource();
 
     //given
-    when(exchangeService.exchangeConversion(exchangeConversionRequest)).thenReturn(exchangeConversionResponse);
+    when(exchangeService.exchangeConversion(any(), any(), any())).thenReturn(exchangeConversionResponse);
 
     //when
-    final ResponseEntity<ConversionResponseResource> exchangeRateResourceApi = exchangeController.conversion(exchangeConversionRequest);
+    final ResponseEntity<ConversionResponseResource> exchangeRateResourceApi = exchangeController.conversion(BigDecimal.TEN, "USD",
+        List.of("EUR", "GBP"));
 
     // then
-    inOrder.verify(exchangeService).exchangeConversion(exchangeConversionRequest);
+    inOrder.verify(exchangeService).exchangeConversion(any(), any(), any());
     inOrder.verifyNoMoreInteractions();
     assertNotNull(exchangeRateResourceApi.getBody());
   }
@@ -93,19 +93,22 @@ class ExchangeControllerTests {
   @Test
   void list() throws EmptyParametersException {
 
-    final var exchangeListResource = ExchangeDataLoader.getExchangeListResource();
-    List<Transaction> listResponse = ExchangeDataLoader.getTransaction();
+    Long transactionId = 1L;
+    Date conversionDate = new Date();
+
+    Transaction listResponse = ExchangeDataLoader.getTransaction();
 
     //given
-    when(exchangeService.exchangeList(exchangeListResource)).thenReturn(listResponse);
+    when(exchangeService.exchangeList(any(), any())).thenReturn(List.of(listResponse));
 
     //when
-    final ResponseEntity<CollectionModel<TransactionResource>> exchangeRateResourceApi = exchangeController.list(exchangeListResource);
+    final ResponseEntity<CollectionModel<TransactionResponseResource>> transactionResponse = exchangeController.list(transactionId,
+        conversionDate);
 
     //then
-    inOrder.verify(exchangeService).exchangeList(exchangeListResource);
+    inOrder.verify(exchangeService).exchangeList(transactionId, conversionDate);
     inOrder.verifyNoMoreInteractions();
-    assertNotNull(exchangeRateResourceApi.getBody());
+    assertNotNull(transactionResponse.getBody());
 
   }
 

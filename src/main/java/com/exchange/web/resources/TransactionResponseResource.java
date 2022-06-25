@@ -14,7 +14,7 @@ import org.springframework.hateoas.RepresentationModel;
 @Builder
 @Getter
 @Setter
-public class TransactionResource extends RepresentationModel<TransactionResource> {
+public class TransactionResponseResource extends RepresentationModel<TransactionResponseResource> {
 
   private String source;
 

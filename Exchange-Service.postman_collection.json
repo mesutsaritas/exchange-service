@@ -1,0 +1,166 @@
+{
+	"info": {
+		"_postman_id": "d12ed98e-b445-4f3c-8d2f-ef25f8722e5d",
+		"name": "Exchange Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2921176"
+	},
+	"item": [
+		{
+			"name": "localhost:8080/exchange/rate",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "source",
+						"value": "USD",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "targets",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/exchange/rate?source=USD&targets=EUR,GBP",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"exchange",
+						"rate"
+					],
+					"query": [
+						{
+							"key": "source",
+							"value": "USD"
+						},
+						{
+							"key": "targets",
+							"value": "EUR,GBP"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/exchange/conversion",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "amount",
+						"value": "10",
+						"type": "text"
+					},
+					{
+						"key": "source",
+						"value": "USD",
+						"type": "text"
+					},
+					{
+						"key": "targets",
+						"value": "EUR,GBP",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/exchange/conversion?source=USD&amount=10&targets=EUR,GBP",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"exchange",
+						"conversion"
+					],
+					"query": [
+						{
+							"key": "source",
+							"value": "USD"
+						},
+						{
+							"key": "amount",
+							"value": "10"
+						},
+						{
+							"key": "targets",
+							"value": "EUR,GBP"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/exchange/list",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/exchange/list?transactionId=1&conversionDate=06/25/2022",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"exchange",
+						"list"
+					],
+					"query": [
+						{
+							"key": "transactionId",
+							"value": "1"
+						},
+						{
+							"key": "conversionDate",
+							"value": "06/25/2022"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

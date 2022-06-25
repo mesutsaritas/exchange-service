@@ -43,6 +43,11 @@ public class CurrencyService {
     }
 
     LinkedHashMap<String, BigDecimal> resultMap = new LinkedHashMap<>();
-    return currencyServiceResponseResource.getQuotes();
+    currencyServiceResponseResource.getQuotes().forEach((key, value) -> {
+      String newKey = key.replaceFirst("^" + source, "");
+      resultMap.put(newKey, value);
+    });
+
+    return resultMap;
   }
 }

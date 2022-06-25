@@ -10,6 +10,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,7 +27,7 @@ import lombok.experimental.SuperBuilder;
 @SequenceGenerator(name = "default_gen", sequenceName = "SEQ_TRANSACTION", allocationSize = 1)
 @Getter
 @Setter
-public class Transaction extends AbstractEntity<Long> {
+public class Transaction extends Auditable<String, Long> {
 
   private static final long serialVersionUID = 1L;
 

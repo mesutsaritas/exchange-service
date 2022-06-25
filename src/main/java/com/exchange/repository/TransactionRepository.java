@@ -13,6 +13,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TransactionRepository extends CrudRepository<Transaction, Long> {
 
-    List<Transaction> findByIdOrCreatedDate(Long Id, Date conversionDate);
-
+  List<Transaction> findByIdOrCreatedDate(Long Id, Date conversionDate);
 }
