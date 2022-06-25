@@ -5,7 +5,7 @@ Exchange API is a Restful API providing exchange rates and conversions for many 
 
 ## 1. Technologies
 
-Exchange Rates API is a Spring Boot project written in Java 11, and it uses following:
+Exchange API is a Spring Boot project written in Java 11, and it uses following:
 
 - JDK 11
 - Spring Framework
