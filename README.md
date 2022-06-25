@@ -2,7 +2,6 @@
 
 Exchange API is a Restful API providing exchange rates and conversions for many currencies.
 
-
 ## 1. Technologies
 
 Exchange API is a Spring Boot project written in Java 11, and it uses following:
@@ -15,7 +14,6 @@ Exchange API is a Spring Boot project written in Java 11, and it uses following:
 - Docker
 - H2 in memory Database
 
-
 ## 2. Running
 
 The required docker codes to run are listed below;
@@ -23,11 +21,12 @@ The required docker codes to run are listed below;
 	 docker build -t exchange-service . 
      docker run -d -p 8080:8080 -t exchange-service
 
-
 ## 3. Documentation
 
-API documentation is managed by Spring Doc. To access Swagger UI, open /swagger.html in a web browser after running Exchange API. You can also find Open API specification at /docs as a Json.
+API documentation is managed by Spring Doc. To access Swagger UI, open /swagger.html in a web browser after running
+Exchange API. You can also find Open API specification at /docs as a Json.
 
 ## 4. Testing
 
-Exchange API is built with Maven. You can use regular Maven tasks such as clean, compile, test tasks for development and testing.
+Exchange API is built with Maven. You can use regular Maven tasks such as clean, compile, test tasks for development and
+testing.

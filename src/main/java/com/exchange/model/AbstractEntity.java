@@ -15,7 +15,7 @@ import org.springframework.util.ClassUtils;
 /**
  * @author msaritas
  */
-@SuperBuilder(toBuilder=true)
+@SuperBuilder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @MappedSuperclass
