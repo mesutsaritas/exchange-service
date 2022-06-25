@@ -1,5 +1,5 @@
-# For Java 14, try this
-FROM adoptopenjdk/openjdk11:jre-11.0.6_10-alpine
+# For Java 11, try this
+FROM adoptopenjdk/openjdk11:latest
 
 
 # Refer to Maven build -> finalName
@@ -12,4 +12,4 @@ WORKDIR /opt/app
 COPY ${JAR_FILE} app.jar
 
 # java -jar /opt/app/app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java","-jar","app.jar"]
