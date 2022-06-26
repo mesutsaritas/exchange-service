@@ -25,6 +25,8 @@ public class CurrencyService {
   @Value("${currency-service.api-key}")
   private String currencyServiceApiKey;
 
+  private final static String FORMAT = "1";
+
 
   private final CurrencyClient currencyClient;
 
@@ -33,7 +35,7 @@ public class CurrencyService {
     String currencies = targets.stream().map(String::valueOf).collect(Collectors.joining(","));
 
     CurrencyServiceResponseResource currencyServiceResponseResource =
-        currencyClient.callCurrencyApi(currencyServiceApiKey, source, currencies, "1");
+        currencyClient.callCurrencyApi(currencyServiceApiKey, source, currencies, FORMAT);
 
     if (!currencyServiceResponseResource.getSuccess()) {
       log.warn(
