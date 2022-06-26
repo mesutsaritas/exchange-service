@@ -25,6 +25,7 @@ public class TransactionResourceAssembler
     resource.transactionDate(entity.getCreatedDate());
     resource.source(entity.getSource());
     resource.amount(entity.getAmount());
+    resource.transactionId(entity.getId());
     if (!CollectionUtils.isEmpty(entity.getTransactionDetail())) {
       List<TransactionDetailResource> transactionResourceList =
           entity.getTransactionDetail().stream().map(this::getTransactionDetail).collect(Collectors.toList());

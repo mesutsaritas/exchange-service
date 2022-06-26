@@ -16,6 +16,8 @@ import org.springframework.hateoas.RepresentationModel;
 @Setter
 public class TransactionResponseResource extends RepresentationModel<TransactionResponseResource> {
 
+  private Long transactionId;
+
   private String source;
 
   private BigDecimal amount;
